@@ -58,33 +58,6 @@ var requestHandler = function(request, response) {
   }
 };
 
-// dispatcher.onGet("/classes/messages", function(req, res) {
-//   var headers = defaultCorsHeaders;
-//   headers['Content-Type'] = "application/json";
-//   res.writeHead(200, headers);
-
-//   res.end(JSON.stringify(messages));
-// });
-
-// dispatcher.onPost("/classes/messages", function(req, res) {
-//   var reqObj = JSON.parse(req.body);
-//   messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
-
-//   var headers = defaultCorsHeaders;
-//   headers['Content-Type'] = "application/json";
-//   res.writeHead(201, headers);
-//   res.end('{"status": "ok"}');
-// });
-
-// dispatcher.onGet("/classes/room1", function(req, res) {
-//   var headers = defaultCorsHeaders;
-//   headers['Content-Type'] = "application/json";
-//   res.writeHead(200, headers);
-
-//   res.end(JSON.stringify(messages));
-// });
-
-
 module.exports.requestHandler = requestHandler;
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

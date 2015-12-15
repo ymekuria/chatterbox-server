@@ -26,15 +26,15 @@ var app = {
     app.$roomSelect.on('change', app.saveRoom);
 
     // Fetch previous messages
-    app.startSpinner();
+    // app.startSpinner();
     app.fetch(false);
 
     // Poll for new messages
-    // setInterval(app.fetch, 3000);
+    setInterval(app.fetch, 3000);
   }, 
 
   send: function(data) {
-    app.startSpinner();
+    // app.startSpinner();
     // Clear messages input
     app.$message.val('');
 
@@ -67,7 +67,7 @@ var app = {
         // Get the last message
         var mostRecentMessage = data.results[data.results.length-1];
         var displayedRoom = $('.chat span').first().data('roomname');
-        app.stopSpinner();
+        // app.stopSpinner();
         // Only bother updating the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
           // Update the UI with the fetched rooms
@@ -94,7 +94,7 @@ var app = {
     // Clear existing messages
 
     app.clearMessages();
-    app.stopSpinner();
+    // app.stopSpinner();
     if (Array.isArray(results)) {
       // Add all fetched messages
       results.forEach(app.addMessage);
@@ -202,7 +202,7 @@ var app = {
       }
     }
     else {
-      app.startSpinner();
+      // app.startSpinner();
       // Store as undefined for empty names
       app.roomname = app.$roomSelect.val();
 
@@ -224,13 +224,13 @@ var app = {
     evt.preventDefault();
   },
 
-  startSpinner: function(){
-    $('.spinner img').show();
-    $('form input[type=submit]').attr('disabled', "true");
-  },
+  // startSpinner: function(){
+  //   $('.spinner img').show();
+  //   $('form input[type=submit]').attr('disabled', "true");
+  // },
 
-  stopSpinner: function(){
-    $('.spinner img').fadeOut('fast');
-    $('form input[type=submit]').attr('disabled', null);
-  }
+  // stopSpinner: function(){
+  //   $('.spinner img').fadeOut('fast');
+  //   $('form input[type=submit]').attr('disabled', null);
+  // }
 };
