@@ -1,4 +1,4 @@
-var dispatcher = require('httpdispatcher');
+// var dispatcher = require('httpdispatcher');
 var messages = require('./messages.js');
 
 /*************************************************************
@@ -16,59 +16,74 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 var requestHandler = function(request, response) {
-  // Request and Response come from node's http module.
-  //
-  // They include information about both the incoming request, such as
-  // headers and URL, and about the outgoing response, such as its status
-  // and content.
-  //
-  // Documentation for both request and response can be found in the HTTP section at
-  // http://nodejs.org/documentation/api/
-
-  // Do some basic logging.
-  //
-  // Adding more logging to your server can be an easy way to get passive
-  // debugging help, but you should always be careful about leaving stray
-  // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
-  dispatcher.dispatch(request, response);
+  var headers = request.headers;
+  var method = request.method;
+  var url = request.url;
+  var body = [];
+  if (request.method === 'GET' && request.url === '/classes/messages') {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = "application/json";
+    response.writeHead(200, headers);
+    response.end(JSON.stringify(messages));
+  } else if (request.method === 'POST' && request.url === '/classes/messages') {
+    request.on('error', function(err) {
+      console.error(err);
+    }).on('data', function(chunk) {
+      body.push(chunk);
+    }).on('end', function() {
+      body = Buffer.concat(body).toString();
+      response.on('error', function(err) {
+        console.error(err);
+      });
+
+      var reqObj = JSON.parse(body);
+      messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
+
+      var headers = defaultCorsHeaders;
+      headers['Content-Type'] = "application/json";
+      response.writeHead(201, headers);
+      response.end('{"status": "ok"}');
+    });
+  } else if (request.method === 'OPTIONS' && request.url === '/classes/messages') {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = "application/json";
+    response.writeHead(200, headers);
+    response.end();
+  } else {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = "application/json";
+    response.writeHead(404, headers);
+    response.end();
+  }
 };
 
-dispatcher.onGet("/classes/messages", function(req, res) {
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = "application/json";
-  res.writeHead(200, headers);
+// dispatcher.onGet("/classes/messages", function(req, res) {
+//   var headers = defaultCorsHeaders;
+//   headers['Content-Type'] = "application/json";
+//   res.writeHead(200, headers);
 
-  res.end(JSON.stringify(messages));
-});
+//   res.end(JSON.stringify(messages));
+// });
 
-dispatcher.onPost("/classes/messages", function(req, res) {
-  var reqObj = JSON.parse(req.body);
-  messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
+// dispatcher.onPost("/classes/messages", function(req, res) {
+//   var reqObj = JSON.parse(req.body);
+//   messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
 
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = "application/json";
-  res.writeHead(201, headers);
-  res.end('{"status": "ok"}');
-});
+//   var headers = defaultCorsHeaders;
+//   headers['Content-Type'] = "application/json";
+//   res.writeHead(201, headers);
+//   res.end('{"status": "ok"}');
+// });
 
-dispatcher.onGet("/classes/room1", function(req, res) {
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = "application/json";
-  res.writeHead(200, headers);
+// dispatcher.onGet("/classes/room1", function(req, res) {
+//   var headers = defaultCorsHeaders;
+//   headers['Content-Type'] = "application/json";
+//   res.writeHead(200, headers);
 
-  res.end(JSON.stringify(messages));
-});
+//   res.end(JSON.stringify(messages));
+// });
 
-dispatcher.onPost("/classes/room1", function(req, res) {
-  var reqObj = JSON.parse(req.body);
-  messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
-
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = "application/json";
-  res.writeHead(201, headers);
-  res.end('{"status": "ok"}');
-});
 
 module.exports.requestHandler = requestHandler;
 
