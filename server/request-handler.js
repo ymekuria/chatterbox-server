@@ -70,7 +70,7 @@ dispatcher.onPost("/classes/messages", function(req, res) {
   res.end('{"status": "ok"}');
 });
 
-module.exports = requestHandler;
+module.exports.requestHandler = requestHandler;
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
