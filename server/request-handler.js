@@ -42,15 +42,7 @@ dispatcher.onGet("/classes/messages", function(req, res) {
   res.end(JSON.stringify(messages));
 });
 
-dispatcher.onGet("/classes/room1", function(req, res) {
-  var headers = defaultCorsHeaders;
-  headers['Content-Type'] = "application/json";
-  res.writeHead(200, headers);
-
-  res.end(JSON.stringify(messages));
-});
-
-dispatcher.onPost("/classes/room1", function(req, res) {
+dispatcher.onPost("/classes/messages", function(req, res) {
   var reqObj = JSON.parse(req.body);
   messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
 
@@ -60,7 +52,15 @@ dispatcher.onPost("/classes/room1", function(req, res) {
   res.end('{"status": "ok"}');
 });
 
-dispatcher.onPost("/classes/messages", function(req, res) {
+dispatcher.onGet("/classes/room1", function(req, res) {
+  var headers = defaultCorsHeaders;
+  headers['Content-Type'] = "application/json";
+  res.writeHead(200, headers);
+
+  res.end(JSON.stringify(messages));
+});
+
+dispatcher.onPost("/classes/room1", function(req, res) {
   var reqObj = JSON.parse(req.body);
   messages.addMessage(reqObj.username, reqObj.roomName, reqObj.message);
 

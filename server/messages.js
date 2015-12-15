@@ -1,14 +1,15 @@
 var Messages = function(){
   this.results = [];
+  this.objectId = 0;
 };
 
 Messages.prototype.addMessage = function(username, roomname, message){
   this.results.push({
-    createdAt: "2015-12-14T22:45:18.702Z",
-    objectId: "345345",
+    createdAt: (new Date()).toString(),
+    objectId: ++this.objectId,
     roomname: roomname,
     message: message,
-    updatedAt: "2015-12-14T22:45:18.702Z",
+    updatedAt: (new Date()).toString(),
     username: username
   });
 };
