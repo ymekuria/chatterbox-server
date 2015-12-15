@@ -21,15 +21,20 @@ var requestHandler = function(request, response) {
   var method = request.method;
   var url = request.url;
   var body = [];
-  if (request.method === 'GET' && request.url === '/classes/messages') {
+  console.log("OUThere: ", request.url)
+  if (request.method === 'GET' && (request.url === '/classes/messages' || request.url === '/classes/room1') ) {
+    console.log("GEThere: ", request.url)
     var headers = defaultCorsHeaders;
     headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
     response.end(JSON.stringify(messages));
-  } else if (request.method === 'POST' && request.url === '/classes/messages') {
+  } else if (request.method === 'POST' && (request.url === '/classes/messages' || request.url === '/classes/room1')) {
+    console.log("POSThere: ", request.url)
+    
     request.on('error', function(err) {
       console.error(err);
     }).on('data', function(chunk) {
+      // console.log("im here: ", request.url)
       body.push(chunk);
     }).on('end', function() {
       body = Buffer.concat(body).toString();
@@ -45,7 +50,7 @@ var requestHandler = function(request, response) {
       response.writeHead(201, headers);
       response.end('{"status": "ok"}');
     });
-  } else if (request.method === 'OPTIONS' && request.url === '/classes/messages') {
+  } else if (request.method === 'OPTIONS' && (request.url === '/classes/messages' || request.url === '/classes/room1')) {
     var headers = defaultCorsHeaders;
     headers['Content-Type'] = "application/json";
     response.writeHead(200, headers);
